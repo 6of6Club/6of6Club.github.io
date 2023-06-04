@@ -167,47 +167,43 @@ export const useCryptoStore = defineStore("eth", () => {
     setLoader(true);
 
     try {
-      const { ethereum } = window;
+      const data = await publicClient.value.readContract({
+        ...contractConfig,
+        functionName: "tokensOfOwner",
+        args: [owner],
+      });
 
-      if (ethereum) {
-        const data = await publicClient.value.readContract({
-          ...contractConfig,
-          functionName: "tokensOfOwner",
-          args: [owner],
+      page = page ? parseInt(page) : 1;
+
+      const contracts = [];
+      data
+        .reverse()
+        .slice((page - 1) * 120, page * 120)
+        .forEach((id) => {
+          contracts.push({
+            ...contractConfig,
+            functionName: "tokenURI",
+            args: [id],
+          });
         });
 
-        page = page ? parseInt(page) : 1;
+      last.value = page * 120 < data.length;
 
-        const contracts = [];
-        data
-          .reverse()
-          .slice((page - 1) * 120, page * 120)
-          .forEach((id) => {
-            contracts.push({
-              ...contractConfig,
-              functionName: "tokenURI",
-              args: [id],
-            });
-          });
+      const result = await publicClient.value.multicall({
+        contracts,
+        multicallAddress: contractConfig.multicall,
+      });
 
-        last.value = page * 120 < data.length;
-
-        const result = await publicClient.value.multicall({
-          contracts,
-          multicallAddress: contractConfig.multicall,
-        });
-
-        if (page === 1) {
-          tokens.value = [];
-        }
-        result
-          .filter((r) => r.status === "success")
-          .forEach((r) => {
-            tokens.value.push(
-              JSON.parse(r.result.replace("data:application/json;utf8,", ""))
-            );
-          });
+      if (page === 1) {
+        tokens.value = [];
       }
+      result
+        .filter((r) => r.status === "success")
+        .forEach((r) => {
+          tokens.value.push(
+            JSON.parse(r.result.replace("data:application/json;utf8,", ""))
+          );
+        });
 
       setLoader(false);
     } catch (e) {

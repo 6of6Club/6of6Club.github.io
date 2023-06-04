@@ -15,6 +15,10 @@ module.exports = {
           "base-100": "#001c21",
           "base-200": "#001c21",
           "base-300": "#002228",
+          ".btn-primary:hover": {
+            "background-color": "#002329",
+            "border-color": "#002329",
+          },
         },
       },
     ],

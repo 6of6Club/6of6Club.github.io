@@ -17,12 +17,11 @@ const id = (token) => token.name.split("#")[1];
 const lost = (token) => token.attributes[1].value != "🔴";
 
 watchEffect(async () => {
-  console.log("watchEffect", `0x${hash.value}`, page.value);
   await tokensOfOwner(`0x${hash.value}`, page.value);
 });
 
 watch(tokens, (tokens) => {
-  console.log("tokens", tokens);
+  // console.log("tokens", tokens);
 });
 </script>
 
