@@ -6,7 +6,7 @@ import { useCryptoStore } from "../stores/eth.js";
 
 const cryptoStore = useCryptoStore();
 const { contract, tokensOfOwner } = cryptoStore;
-const { loading, last, tokens } = storeToRefs(cryptoStore);
+const { account, loading, last, tokens } = storeToRefs(cryptoStore);
 
 const route = useRoute();
 
@@ -48,14 +48,14 @@ watch(tokens, (tokens) => {
                   )}`"
                   target="_blank"
                   className="btn btn-info btn-block btn-sm"
-                  >Sell on OpenSea</a
+                  >{{ account === `0x${hash}` ? "Sell" : "Buy" }} on OpenSea</a
                 >
                 <div class="divider divider-vertical">OR</div>
                 <a
                   :href="`https://blur.io/asset/${contract}/${id(token)}`"
                   target="_blank"
                   className="btn btn-warning btn-block btn-sm"
-                  >Sell on Blur</a
+                  >{{ account === `0x${hash}` ? "Sell" : "Buy" }} on Blur</a
                 >
               </div>
             </div>
