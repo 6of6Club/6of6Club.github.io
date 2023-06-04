@@ -79,7 +79,7 @@ export const useCryptoStore = defineStore("eth", () => {
             account.value = address;
           }
         } else {
-          const projectId = "";
+          const projectId = "2d370def4cd33b8cdc388ee6f5511aae";
 
           const provider = await EthereumProvider.init({
             projectId,
