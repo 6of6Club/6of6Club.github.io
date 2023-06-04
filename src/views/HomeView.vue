@@ -13,6 +13,8 @@ onMounted(async () => {
 
 const quantity = ref(1);
 
+const loading = ref(false);
+
 const win = ref("win.svg");
 const lose = ref("lose.svg");
 const plus = ref("plus.svg");
@@ -38,8 +40,15 @@ setInterval(() => {
           <button
             class="btn btn-primary"
             v-if="account === null"
-            @click="connect"
+            @click="
+              async () => {
+                loading = true;
+                await connect();
+                loading = false;
+              }
+            "
           >
+            <span v-if="loading" class="loading loading-spinner"></span>
             connect and mint
           </button>
           <div v-else class="form-control">
@@ -53,12 +62,16 @@ setInterval(() => {
               <button
                 class="btn btn-primary"
                 @click="
-                  (e) => {
-                    e.target.classList.toggle('loading');
-                    mint(quantity);
+                  async () => {
+                    loading = true;
+                    await mint(quantity);
+                    setTimeout(() => {
+                      loading = false;
+                    }, 30000);
                   }
                 "
               >
+                <span v-if="loading" class="loading loading-spinner"></span>
                 free mint
               </button>
             </div>
