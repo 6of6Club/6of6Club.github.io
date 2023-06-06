@@ -27,7 +27,7 @@ export const useCryptoStore = defineStore("eth", () => {
   const chain = foundry;
 
   const loading = ref(false);
-  const last = ref(true);
+  const last = ref(false);
   const account = ref(null);
   const token = ref({});
   const tokens = ref([]);
