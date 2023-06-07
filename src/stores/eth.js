@@ -11,7 +11,7 @@ import { useRouter } from "vue-router";
   "multicall": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
 
   Polygon
-  "address": "0xbAf8A4032888d89f28Be318a9348267B51e79598",
+  "address": "0x6339d6fdF06c782046cc4DB7a61BEf1bB8542E58",
   "multicall": "0xcA11bde05977b3631167028862bE2a173976CA11",
 */
 
@@ -127,7 +127,8 @@ export const useCryptoStore = defineStore("eth", () => {
         const contracts = [];
         for (let i = id; i < id + l; i++) {
           contracts.push({
-            ...contractConfig,
+            address: contractConfig.address,
+            abi: contractConfig.abi,
             functionName: functionName,
             args: [i],
           });
@@ -167,7 +168,8 @@ export const useCryptoStore = defineStore("eth", () => {
 
     try {
       const data = await publicClient.value.readContract({
-        ...contractConfig,
+        address: contractConfig.address,
+        abi: contractConfig.abi,
         functionName: "tokensOfOwner",
         args: [owner],
       });
@@ -180,7 +182,8 @@ export const useCryptoStore = defineStore("eth", () => {
         .slice((page - 1) * 128, page * 128)
         .forEach((id) => {
           contracts.push({
-            ...contractConfig,
+            address: contractConfig.address,
+            abi: contractConfig.abi,
             functionName: "tokenURI",
             args: [id],
           });
@@ -220,7 +223,8 @@ export const useCryptoStore = defineStore("eth", () => {
 
       if (ethereum) {
         publicClient.value.watchContractEvent({
-          ...contractConfig,
+          address: contractConfig.address,
+          abi: contractConfig.abi,
           eventName: "Transfer",
           onLogs: (logs) => {
             logs.forEach(async (log) => {
@@ -233,7 +237,8 @@ export const useCryptoStore = defineStore("eth", () => {
         });
 
         const { request } = await publicClient.value.simulateContract({
-          ...contractConfig,
+          address: contractConfig.address,
+          abi: contractConfig.abi,
           functionName: "mint",
           args: [quantity],
           account: account.value,
