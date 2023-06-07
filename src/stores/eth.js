@@ -1,6 +1,5 @@
 import { ref } from "vue";
 import { createPublicClient, createWalletClient, http, custom } from "viem";
-import { ethersWalletToAccount } from "viem/ethers";
 import { foundry, polygonMumbai } from "viem/chains";
 import { acceptHMRUpdate, defineStore } from "pinia";
 
@@ -24,7 +23,7 @@ import {
 import contractConfig from "@/artifacts/config.json";
 
 export const useCryptoStore = defineStore("eth", () => {
-  const chain = foundry;
+  const chain = contractConfig.chain == "foundry" ? foundry : polygonMumbai;
 
   const loading = ref(false);
   const last = ref(false);
@@ -113,7 +112,7 @@ export const useCryptoStore = defineStore("eth", () => {
     account.value = null;
   }
 
-  async function get(functionName, tokenId, limit = 50) {
+  async function get(functionName, tokenId, limit = 128) {
     if (!tokenId) return;
 
     setLoader(true);
@@ -178,7 +177,7 @@ export const useCryptoStore = defineStore("eth", () => {
       const contracts = [];
       data
         .reverse()
-        .slice((page - 1) * 120, page * 120)
+        .slice((page - 1) * 128, page * 128)
         .forEach((id) => {
           contracts.push({
             ...contractConfig,
@@ -187,7 +186,7 @@ export const useCryptoStore = defineStore("eth", () => {
           });
         });
 
-      last.value = page * 120 < data.length;
+      last.value = page * 128 < data.length;
 
       const result = await publicClient.value.multicall({
         contracts,
@@ -258,6 +257,8 @@ export const useCryptoStore = defineStore("eth", () => {
   }
 
   return {
+    opensea: contractConfig.opensea,
+    blur: contractConfig.blur,
     contract: contractConfig.address,
     connect,
     disconnect,

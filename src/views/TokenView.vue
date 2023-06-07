@@ -5,7 +5,7 @@ import { useRoute } from "vue-router";
 import { useCryptoStore } from "../stores/eth.js";
 
 const cryptoStore = useCryptoStore();
-const { contract, get } = cryptoStore;
+const { opensea, blur, contract, get } = cryptoStore;
 const { loading, token } = storeToRefs(cryptoStore);
 
 const route = useRoute();
@@ -45,14 +45,16 @@ onMounted(async () => {
       <div className="card-actions">
         <div v-if="!lost">
           <a
-            :href="`https://opensea.io/assets/ethereum/${contract}/${id}`"
+            v-if="opensea !== ''"
+            :href="`${opensea}${contract}/${id}`"
             target="_blank"
             className="btn btn-info btn-block"
             >Sell on OpenSea</a
           >
-          <div class="divider divider-vertical">OR</div>
+          <div v-if="blur !== ''" class="divider divider-vertical">OR</div>
           <a
-            :href="`https://blur.io/asset/${contract}/${id}`"
+            v-if="blur !== ''"
+            :href="`${blur}${contract}/${id}`"
             target="_blank"
             className="btn btn-warning btn-block"
             >Sell on Blur</a
