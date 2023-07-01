@@ -11,7 +11,7 @@ onMounted(async () => {
   await connect(true);
 });
 
-const quantity = ref(1);
+const quantity = ref(64);
 
 const loading = ref(false);
 
@@ -103,7 +103,7 @@ setInterval(() => {
                 </ul>
               </li>
               <li data-content="" class="step">
-                Sell NFT - only opensea and blur marketplaces are supported
+                Sell NFT - only opensea marketplace are supported
               </li>
             </ul>
           </div>
