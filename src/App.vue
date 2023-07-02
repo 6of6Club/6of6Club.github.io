@@ -73,7 +73,7 @@ onMounted(async () => {
                   6of6 on Opensea</a
                 >
               </li>
-              <li>
+              <!-- <li>
                 <a
                   :href="`https://blur.io/collection/${contract}`"
                   class="justify-between"
@@ -81,7 +81,7 @@ onMounted(async () => {
                 >
                   6of6 on Blur</a
                 >
-              </li>
+              </li> -->
               <li><button @click="disconnect">Logout</button></li>
             </ul>
           </div>
